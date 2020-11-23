@@ -31,10 +31,18 @@ func RestoreOrderInventory() {
 		return
 	}
 	shopIds := make([]int64, 0)
+	shopIdsSet := map[int64]struct{}{}
 	orderCodes := make([]string, 0)
+	orderCodesSet := map[string]struct{}{}
 	for i := 0; i < len(invalidOrderList); i++ {
-		shopIds = append(shopIds, invalidOrderList[i].ShopId)
-		orderCodes = append(orderCodes, invalidOrderList[i].OrderCode)
+		if _, ok := shopIdsSet[invalidOrderList[i].ShopId]; !ok {
+			shopIds = append(shopIds, invalidOrderList[i].ShopId)
+			shopIdsSet[invalidOrderList[i].ShopId] = struct{}{}
+		}
+		if _, ok := orderCodesSet[invalidOrderList[i].OrderCode]; !ok {
+			orderCodesSet[invalidOrderList[i].OrderCode] = struct{}{}
+			orderCodes = append(orderCodes, invalidOrderList[i].OrderCode)
+		}
 	}
 	invalidOrderSkuList, err := repository.GetOrderSkuList(selectInvalidOrderSku, shopIds, orderCodes)
 	if err != nil {
