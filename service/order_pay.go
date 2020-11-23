@@ -9,13 +9,18 @@ import (
 
 func HandleOrderPayExpire() {
 	ctx := context.Background()
-	kelvins.BusinessLogger.Infof(ctx, "HandleOrderPayExpire start")
 	maps := map[string]interface{}{
-		"pay_state": 4, // 支付过期取消
-		"state":     2,
+		"pay_state":   4, // 支付过期取消
+		"state":       2, // 无效
+		"update_time": time.Now(),
 	}
-	payExpire := time.Now()
-	rowAffected, err := repository.UpdateOrderPayExpire(payExpire, maps)
+	payExpireWhere := time.Now()
+	where := map[string]interface{}{
+		"state":            0,           // 有效
+		"pay_state":        []int{0, 1}, // 未支付,支付中
+		"inventory_verify": 0,           // 库存未核实
+	}
+	rowAffected, err := repository.UpdateOrderPayExpire(where, payExpireWhere, maps)
 	if err != nil {
 		kelvins.ErrLogger.Errorf(ctx, "UpdateOrderPayExpire err: %v", err)
 		return
@@ -25,12 +30,12 @@ func HandleOrderPayExpire() {
 
 func HandleOrderPayFailed() {
 	ctx := context.Background()
-	kelvins.BusinessLogger.Infof(ctx, "HandleOrderPayFailed start")
 	where := map[string]interface{}{
 		"pay_state": 2,
 	}
 	maps := map[string]interface{}{
-		"state": 2,
+		"state":       2,
+		"update_time": time.Now(),
 	}
 	rowAffected, err := repository.UpdateOrder(where, maps)
 	if err != nil {

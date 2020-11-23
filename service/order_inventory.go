@@ -11,18 +11,18 @@ import (
 	"gitee.com/kelvins-io/kelvins"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
 	selectInvalidOrder    = "order_code,shop_id"
-	selectInvalidOrderSku = "amount,sku_code,order_code"
-	whereInvalidOrder     = " (pay_state in (2,4) or state = 2) and inventory_state = 0"
+	selectInvalidOrderSku = "shop_id,amount,sku_code,order_code"
+	whereInvalidOrder     = " (pay_state in (2,4) or state = 2) and inventory_verify = 0"
 )
 
 func RestoreOrderInventory() {
 	ctx := context.Background()
-	kelvins.BusinessLogger.Infof(ctx, "RestoreOrderInventory start")
-	invalidOrderList, err := repository.FindInvalidOrderList(selectInvalidOrder, whereInvalidOrder)
+	invalidOrderList, err := repository.FindInvalidOrderList(selectInvalidOrder, whereInvalidOrder, 400, 1)
 	if err != nil {
 		kelvins.ErrLogger.Errorf(ctx, "FindInvalidOrderList err: %v", err)
 		return
@@ -74,6 +74,9 @@ func RestoreOrderInventory() {
 		}
 		inventoryEntryShopList = append(inventoryEntryShopList, inventoryEntryShop)
 	}
+	if len(inventoryEntryShopList) == 0 {
+		return
+	}
 	serverName := args.RpcServiceMicroMallSku
 	conn, err := util.GetGrpcClient(serverName)
 	if err != nil {
@@ -98,6 +101,9 @@ func RestoreOrderInventory() {
 		kelvins.ErrLogger.Infof(ctx, "RestoreInventory not ok ,rsp: %+v, req: %+v", restoreRsp, restoreReq)
 		return
 	}
+	if len(orderCodes) == 0 {
+		return
+	}
 	tx := kelvins.XORM_DBEngine.NewSession()
 	err = tx.Begin()
 	if err != nil {
@@ -106,11 +112,12 @@ func RestoreOrderInventory() {
 	}
 	// 记录扣减，防止重复扣减
 	where := map[string]interface{}{
-		"order_code":      orderCodes, // 订单code
-		"inventory_state": 0,          // 未核实
+		"order_code":       orderCodes, // 订单code
+		"inventory_verify": 0,          // 未核实
 	}
 	maps := map[string]interface{}{
-		"inventory_state": 1, // 已核实
+		"inventory_verify": 1, // 已核实
+		"update_time":      time.Now(),
 	}
 	rowAffected, err := repository.UpdateOrderByTx(tx, where, maps)
 	if err != nil {
