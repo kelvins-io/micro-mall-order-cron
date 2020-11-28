@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	CronHandleOrderPayExpireTask    = "30 */5 * * * *"
-	CronHandleOrderPayFailedTask    = "30 */5 * * * *"
+	CronHandleOrderPayExpireTask    = "30 */3 * * * *"
+	CronHandleOrderPayFailedTask    = "30 */8 * * * *"
 	CronHandleOrderInventoryRestore = "30 */5 * * * *"
 )
 

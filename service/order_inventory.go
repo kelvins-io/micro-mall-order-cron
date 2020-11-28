@@ -22,7 +22,7 @@ const (
 
 func RestoreOrderInventory() {
 	ctx := context.Background()
-	invalidOrderList, err := repository.FindInvalidOrderList(selectInvalidOrder, whereInvalidOrder, 400, 1)
+	invalidOrderList, err := repository.FindInvalidOrderList(selectInvalidOrder, whereInvalidOrder, 300, 1)
 	if err != nil {
 		kelvins.ErrLogger.Errorf(ctx, "FindInvalidOrderList err: %v", err)
 		return
@@ -112,12 +112,6 @@ func RestoreOrderInventory() {
 	if len(orderCodes) == 0 {
 		return
 	}
-	tx := kelvins.XORM_DBEngine.NewSession()
-	err = tx.Begin()
-	if err != nil {
-		kelvins.ErrLogger.Errorf(ctx, "UpdateOrder Begin err: %v", err)
-		return
-	}
 	// 记录扣减，防止重复扣减
 	where := map[string]interface{}{
 		"order_code":       orderCodes, // 订单code
@@ -127,15 +121,10 @@ func RestoreOrderInventory() {
 		"inventory_verify": 1, // 已核实
 		"update_time":      time.Now(),
 	}
-	rowAffected, err := repository.UpdateOrderByTx(tx, where, maps)
+	rowAffected, err := repository.UpdateOrder(where, maps)
 	if err != nil {
 		kelvins.ErrLogger.Errorf(ctx, "UpdateOrder err: %v", err)
 		return
 	}
 	_ = rowAffected
-	err = tx.Commit()
-	if err != nil {
-		kelvins.ErrLogger.Errorf(ctx, "UpdateOrder Commit err: %v", err)
-		return
-	}
 }

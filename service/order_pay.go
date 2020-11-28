@@ -9,16 +9,18 @@ import (
 
 func HandleOrderPayExpire() {
 	ctx := context.Background()
-	maps := map[string]interface{}{
-		"pay_state":   4, // 支付过期取消
-		"state":       2, // 无效
-		"update_time": time.Now(),
-	}
-	payExpireWhere := time.Now()
+	// 条件
 	where := map[string]interface{}{
 		"state":            0,           // 有效
 		"pay_state":        []int{0, 1}, // 未支付,支付中
 		"inventory_verify": 0,           // 库存未核实
+	}
+	payExpireWhere := time.Now()
+	// 结果
+	maps := map[string]interface{}{
+		"pay_state":   4, // 支付过期取消
+		"state":       2, // 无效
+		"update_time": time.Now(),
 	}
 	rowAffected, err := repository.UpdateOrderPayExpire(where, payExpireWhere, maps)
 	if err != nil {
@@ -31,10 +33,10 @@ func HandleOrderPayExpire() {
 func HandleOrderPayFailed() {
 	ctx := context.Background()
 	where := map[string]interface{}{
-		"pay_state": 2,
+		"pay_state": 2, // 支付失败
 	}
 	maps := map[string]interface{}{
-		"state":       2,
+		"state":       2, // 无效
 		"update_time": time.Now(),
 	}
 	rowAffected, err := repository.UpdateOrder(where, maps)
