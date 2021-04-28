@@ -14,3 +14,8 @@ vendor
 logs
 etc/app.ini
 micro-mall-order-cron
+micro-mall-order-cron.pid
+micro-mall-order-cron-darwin-amd64
+micro-mall-order-cron-linux-amd64
+micro-mall-order-cron-windows-amd64.exe
+micro-mall-order-cron-windows-amd64
