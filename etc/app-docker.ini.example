@@ -1,0 +1,34 @@
+[kelvins-server]
+EndPoint = 8080
+IsRecordCallResponse = true
+
+[kelvins-logger]
+RootPath = "./logs"
+Level = "debug"
+
+[kelvins-mysql]
+Host = "mysql5_7:3306"
+UserName = "root"
+Password = "micro_mall"
+DBName = "micro_mall_order"
+Charset = "utf8mb4"
+PoolNum =  10
+MaxIdleConns = 5
+ConnMaxLifeSecond = 3600
+MultiStatements = true
+ParseTime = true
+
+[email-config]
+User = "xxxx@qq.com"
+Password = "xxx"
+Host = "smtp.qq.com"
+Port = "465"
+
+[order-pay-expire-task]
+Cron = "0 */3 * * * *"
+
+[order-apy-failed-task]
+Cron = "20 */8 * * * *"
+
+[order-inventory-restore-task]
+Cron = "30 */20 * * * *"
