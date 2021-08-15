@@ -86,7 +86,7 @@ func RestoreOrderInventory() {
 		return
 	}
 	serverName := args.RpcServiceMicroMallSku
-	conn, err := util.GetGrpcClient(serverName)
+	conn, err := util.GetGrpcClient(ctx, serverName)
 	if err != nil {
 		kelvins.ErrLogger.Errorf(ctx, "GetGrpcClient %v,err: %v", serverName, err)
 		return
