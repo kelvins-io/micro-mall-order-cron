@@ -91,7 +91,7 @@ func RestoreOrderInventory() {
 		kelvins.ErrLogger.Errorf(ctx, "GetGrpcClient %v,err: %v", serverName, err)
 		return
 	}
-	defer conn.Close()
+	//defer conn.Close()
 	skuClient := sku_business.NewSkuBusinessServiceClient(conn)
 	restoreReq := sku_business.RestoreInventoryRequest{
 		List: inventoryEntryShopList,
