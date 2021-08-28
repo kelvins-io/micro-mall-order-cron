@@ -8,6 +8,7 @@ import (
 	"gitee.com/cristiane/micro-mall-order-cron/pkg/util"
 	"gitee.com/cristiane/micro-mall-order-cron/proto/micro_mall_sku_proto/sku_business"
 	"gitee.com/cristiane/micro-mall-order-cron/repository"
+	"gitee.com/kelvins-io/common/json"
 	"gitee.com/kelvins-io/kelvins"
 	"strconv"
 	"strings"
@@ -106,7 +107,7 @@ func RestoreOrderInventory() {
 		return
 	}
 	if restoreRsp.Common.Code != sku_business.RetCode_SUCCESS || !restoreRsp.IsSuccess {
-		kelvins.ErrLogger.Infof(ctx, "RestoreInventory not ok ,rsp: %+v, req: %+v", restoreRsp, restoreReq)
+		kelvins.ErrLogger.Infof(ctx, "RestoreInventory req: %v, req: %v", json.MarshalToStringNoError(restoreReq), json.MarshalToStringNoError(restoreRsp))
 		return
 	}
 	if len(orderCodes) == 0 {
