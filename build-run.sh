@@ -11,4 +11,4 @@ cp -n ./etc/app.ini.example ./etc/app.ini
 mkdir -p logs
 
 echo 开始运行micro-mall-order-cron
-./micro-mall-order-cron -s start
+nohup ./micro-mall-order-cron -s start >nohup.out  2>&1  &
