@@ -23,7 +23,7 @@ const (
 
 func RestoreOrderInventory() {
 	ctx := context.Background()
-	invalidOrderList, err := repository.FindInvalidOrderList(selectInvalidOrder, whereInvalidOrder, 300, 1)
+	invalidOrderList, err := repository.FindOrder(selectInvalidOrder, whereInvalidOrder, 300, 1)
 	if err != nil {
 		kelvins.ErrLogger.Errorf(ctx, "FindInvalidOrderList err: %v", err)
 		return

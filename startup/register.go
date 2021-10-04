@@ -38,5 +38,15 @@ func GenCronJobs() []*kelvins.CronJob {
 		}
 	}
 
+	if vars.OrderSearchSyncTaskSetting != nil {
+		if vars.OrderSearchSyncTaskSetting.Cron != "" {
+			tasks = append(tasks, &kelvins.CronJob{
+				Name: "订单搜索同步",
+				Spec: vars.OrderSearchSyncTaskSetting.Cron,
+				Job:  service.OrderSearchSync,
+			})
+		}
+	}
+
 	return tasks
 }

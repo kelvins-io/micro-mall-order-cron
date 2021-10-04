@@ -19,3 +19,7 @@ type OrderPayFailedTaskSettingS struct {
 type OrderInventoryRestoreTaskSettingS struct {
 	Cron string `json:"cron"`
 }
+
+type OrderSearchSyncTaskSettingS struct {
+	Cron string `json:"cron"`
+}

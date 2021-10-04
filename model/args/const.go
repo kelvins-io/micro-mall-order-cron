@@ -1,25 +1,26 @@
 package args
 
-type MerchantsMaterialInfo struct {
-	Uid          int64
-	MaterialId   int64
-	RegisterAddr string
-	HealthCardNo string
-	Identity     int32
-	State        int32
-	TaxCardNo    string
+const (
+	RpcServiceMicroMallSku = "micro-mall-sku"
+)
+
+const (
+	TradeOrderInfoSearchNoticeType = 10001
+)
+
+const (
+	TradeOrderInfoSearchNoticeTag    = "trade_order_info_search_notice"
+	TradeOrderInfoSearchNoticeTagErr = "trade_order_info_search_notice_err"
+)
+
+type SearchTradeOrderEntry struct {
+	Description string `json:"description"`
+	DeviceId    string `json:"device_id"`
+	ShopName    string `json:"shop_name"`
+	ShopAddress string `json:"shop_address"`
+	GoodsName   string `json:"goods_name"`
+	OrderCode   string `json:"order_code"`
 }
-
-const (
-	RpcServiceMicroMallUsers       = "micro-mall-users"
-	RpcServiceMicroMallSku         = "micro-mall-sku"
-	RpcServiceMicroMallUserTrolley = "micro-mall-trolley"
-)
-
-const (
-	TaskNameTradeOrderNotice    = "task_trade_order_notice"
-	TaskNameTradeOrderNoticeErr = "task_trade_order_notice_err"
-)
 
 type CommonBusinessMsg struct {
 	Type    int    `json:"type"`
@@ -28,28 +29,12 @@ type CommonBusinessMsg struct {
 	Content string `json:"content"`
 }
 
-type TradeOrderDetail struct {
-	ShopId    int64  `json:"shop_id"`
-	OrderCode string `json:"order_code"`
-}
-
-type TradeOrderNotice struct {
-	Uid  int64  `json:"uid"`
-	Time string `json:"time"`
-	// 9-19修改为 直接通知交易号, 放弃通知[]TradeOrderDetail
-	TxCode string `json:"tx_code"`
-}
-
 const (
-	Unknown                   = 0
-	TradeOrderEventTypeCreate = 10014
-	TradeOrderEventTypeExpire = 10015
+	Unknown = 0
 )
 
 var MsgFlags = map[int]string{
-	Unknown:                   "未知",
-	TradeOrderEventTypeCreate: "交易订单创建",
-	TradeOrderEventTypeExpire: "交易订单过期",
+	Unknown: "未知",
 }
 
 func GetMsg(code int) string {

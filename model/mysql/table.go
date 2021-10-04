@@ -3,8 +3,9 @@ package mysql
 import "time"
 
 const (
-	TableOrderSku = "order_sku"
-	TableOrder    = "order"
+	TableOrderSku       = "order_sku"
+	TableOrder          = "order"
+	TableOrderSceneShop = "order_scene_shop"
 )
 
 type Order struct {
