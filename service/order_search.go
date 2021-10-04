@@ -18,9 +18,14 @@ var (
 )
 
 func OrderSearchSync() {
+	if vars.OrderSearchSyncTaskSetting != nil {
+		if vars.OrderSearchSyncTaskSetting.SingleSyncNum > 0 {
+			orderSearchSyncPageSize = vars.OrderSearchSyncTaskSetting.SingleSyncNum
+		}
+	}
 	count := 0
 	for {
-		if count > 2 {
+		if count > 5 {
 			break
 		}
 		count++
@@ -67,7 +72,7 @@ func orderSearchSyncOne(pageSize, pageNum int) {
 	for i := 0; i < len(orderSceneList); i++ {
 		orderCodeToScene[orderSceneList[i].OrderCode] = orderSceneList[i]
 	}
-	orderInfoList := make([]args.SearchTradeOrderEntry,0)
+	orderInfoList := make([]args.SearchTradeOrderEntry, 0)
 	for i := 0; i < len(orderList); i++ {
 		shopOrder := args.SearchTradeOrderEntry{
 			Description: orderList[i].Description,

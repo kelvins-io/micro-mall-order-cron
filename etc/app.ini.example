@@ -47,3 +47,4 @@ Cron = "30 */20 * * * *"
 
 [order-search-sync-task]
 Cron = "30 */4 * * * *"
+SingleSyncNum = 100

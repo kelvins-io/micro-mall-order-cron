@@ -21,5 +21,6 @@ type OrderInventoryRestoreTaskSettingS struct {
 }
 
 type OrderSearchSyncTaskSettingS struct {
-	Cron string `json:"cron"`
+	Cron          string `json:"cron"`
+	SingleSyncNum int    `json:"single_sync_num"`
 }
